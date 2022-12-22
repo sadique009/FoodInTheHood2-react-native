@@ -9,29 +9,10 @@ import {
   GlobalStylesheet,
 } from 'react-native';
 import {db} from '../firebase/config';
-import {ref, onValue, push, remove} from 'firebase/database';
+import {ref, onValue, push, update, remove} from 'firebase/database';
 import {GlobalStyles} from '../../GlobalStyles';
 
 const PaymentScreen = ({navigation}) => {
-  const [isVisible, setIsVible] = useState(false);
-  const [CartData, setCartData] = useState([]);
-  const handleOrderPlaced = () => {
-    Alert.alert(
-      'Confirmation',
-      'Your order has been successfully placed. Thanks for using our service.',
-    );
-    onValue(ref(db, '/CartData/'), querySnapshot => {
-      let Data = Object.values(querySnapshot.val() || {});
-      setCartData(Data);
-    });
-    push(ref(db, '/OrderHistory/'), {
-      CartData,
-      Order_Time: new Date().toLocaleString(),
-    });
-    setIsVible(true);
-    console.log('Current Date:', new Date().toLocaleString());
-  };
-
   return (
     <>
       <SafeAreaView>

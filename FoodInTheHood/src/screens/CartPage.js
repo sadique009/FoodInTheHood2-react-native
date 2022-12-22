@@ -45,7 +45,7 @@ export const CartPage = ({navigation}) => {
 
     RazorpayCheckout.open(options)
       .then(data => {
-        // console.log('Success:', data.razorpay_payment_id);
+        console.log('Success:', data.razorpay_payment_id);
         navigation.navigate('Payment');
       })
       .catch(error => {
@@ -68,45 +68,26 @@ export const CartPage = ({navigation}) => {
 
         <SafeAreaView>
           <FlatList
-            // contentContainerStyle={{marginBottom: 50, paddingTop: 8}}
             data={cartData}
             renderItem={({item}) => (
               <SafeAreaView style={GlobalStyles.card}>
                 <Icon
-                  name="highlight-remove"
+                  name="delete"
                   size={35}
                   color="red"
                   style={GlobalStyles.icon}
                   onPress={() => removeItem(item.Key)}
                 />
                 <Text>{item.Item}</Text>
-                <Text style={GlobalStyles.name}>{item.Restaurant}</Text>
+                {/* <Text style={GlobalStyles.name}>{item.Restaurant}</Text> */}
               </SafeAreaView>
             )}
           />
         </SafeAreaView>
-        {/* <SafeAreaView>
-          <TouchableOpacity
-            style={GlobalStyles.submitButton}
-            onPress={Checkout}>
-            <Text style={GlobalStyles.buttonText}>Checkout</Text>
-          </TouchableOpacity>
-        </SafeAreaView> */}
       </View>
 
       <SafeAreaView>
-        <TouchableOpacity
-          style={GlobalStyles.submitButton}
-          onPress={payment}
-          //   setIsVisible(true);
-
-          //   CartData(
-          //     // {Name: item.Restaurant_Name},
-          //     {Cuisine: item.Cuisines},
-          //     // {Price: price},
-          //   );
-          // }}>
-        >
+        <TouchableOpacity style={GlobalStyles.submitButton} onPress={payment}>
           <Text style={GlobalStyles.buttonText}>Checkout</Text>
         </TouchableOpacity>
       </SafeAreaView>

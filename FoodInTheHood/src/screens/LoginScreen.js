@@ -1,12 +1,5 @@
 import React, {useState} from 'react';
-import {
-  View,
-  Text,
-  TouchableOpacity,
-  Stylesheet,
-  TextInput,
-  Alert,
-} from 'react-native';
+import {View, Text, TouchableOpacity, TextInput, Alert} from 'react-native';
 import {signInWithEmailAndPassword} from 'firebase/auth';
 import {auth} from '../firebase/config';
 import {GlobalStyles} from '../../GlobalStyles';
@@ -18,12 +11,9 @@ export default function LoginScreen({navigation}) {
   const handleSubmit = () => {
     signInWithEmailAndPassword(auth, email, password)
       .then(userdata => {
-        // const user = userdata.user;
-
         navigation.replace('Main Page');
       })
       .catch(error => {
-        // const errorCode = error.code;
         const errorMessage = error.message;
         Alert.alert('Error', errorMessage);
       });

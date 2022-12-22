@@ -1,12 +1,5 @@
 import React, {useState} from 'react';
-import {
-  View,
-  Text,
-  TouchableOpacity,
-  Stylesheet,
-  TextInput,
-  Alert,
-} from 'react-native';
+import {View, Text, TouchableOpacity, TextInput, Alert} from 'react-native';
 import {createUserWithEmailAndPassword} from 'firebase/auth';
 import {auth} from '../firebase/config';
 import {GlobalStyles} from '../../GlobalStyles';
@@ -18,12 +11,11 @@ export default function RegisterScreen({navigation}) {
   const handleSubmit = () => {
     createUserWithEmailAndPassword(auth, email, password)
       .then(userdata => {
-        // const user = userdata.user;
-        Alert.alert('Registration', 'You have been registered successfully.');
+        Alert.alert('Success', 'You are now registered.');
         navigation.replace('Login Page');
       })
       .catch(error => {
-        // const errorCode = error.code;
+
         const errorMessage = error.message;
         Alert.alert('Error', errorMessage);
       });

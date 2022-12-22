@@ -1,16 +1,5 @@
 import React, {useState, useEffect} from 'react';
-import {
-  ScrollView,
-  Text,
-  GlobalStylesheet,
-  FlatList,
-  Image,
-  View,
-  Alert,
-  Button,
-} from 'react-native';
-import {List, TextInput} from 'react-native-paper';
-import MainPage from './MainPage';
+import {Text, FlatList, Image} from 'react-native';
 
 import {SafeAreaView} from 'react-native';
 import {GlobalStyles} from '../../GlobalStyles';
@@ -26,8 +15,6 @@ export const RestaurantDetail = ({route, navigation}) => {
 
   const [showButton, setShowButton] = useState(false);
 
-  const price = 200;
-
   useEffect(() => {
     fetch('https://api.npoint.io/c1336d3f8d08ae53247f')
       .then(res => res.json())
@@ -40,13 +27,6 @@ export const RestaurantDetail = ({route, navigation}) => {
       setRestaurant(filteredData);
     };
   }, []);
-
-  // const addItem = data => {
-  //   const getItem = data.filter(i => {
-  //     return i.Cuisines == cuisine;
-  //   });
-  //   setCart(getItem);
-  // };
 
   const CartData = Cuisines => {
     const Item = Cuisines.Item;
@@ -69,18 +49,7 @@ export const RestaurantDetail = ({route, navigation}) => {
         <FlatList
           data={restaurant}
           renderItem={({item}) => (
-            <SafeAreaView
-              style={GlobalStyles.card}
-              // onStartShouldSetResponder={() => {
-              //   setIsVisible(true);
-              //   Alert.alert('added to cart');
-              //   CartData(
-              //     // {Name: item.Restaurant_Name},
-              //     {Item: item.Cuisines},
-              //     // {Price: price},
-              //   );
-              // }}>
-            >
+            <SafeAreaView style={GlobalStyles.card}>
               <Image
                 source={require('./images/home.jpg')}
                 style={GlobalStyles.listImage}
@@ -89,21 +58,6 @@ export const RestaurantDetail = ({route, navigation}) => {
               <Text style={GlobalStyles.name}>City : {item.City}</Text>
               <Text style={GlobalStyles.name}>Cuisines : {item.Cuisines}</Text>
 
-              {/* <TouchableOpacity
-                style={GlobalStyles.submitButton}
-                onPress={() => {
-                  setShowButton(true);
-
-                  {
-                    CartData(
-                      {Name: item.Restaurant_Name},
-                      {Cuisine: item.Cuisines},
-                      {Price: price},
-                    );
-                  }
-                }}>
-                <Text style={GlobalStyles.buttonText}>Add To Cart</Text>
-              </TouchableOpacity> */}
               <TouchableOpacity
                 style={GlobalStyles.submitButton}
                 onPress={() => {
@@ -119,10 +73,6 @@ export const RestaurantDetail = ({route, navigation}) => {
           )}
         />
       </SafeAreaView>
-
-      {/* <View>
-        <TextInput placeholder="ww" style={GlobalStyles.inputField}></TextInput>
-      </View> */}
 
       {showButton && (
         <TouchableOpacity

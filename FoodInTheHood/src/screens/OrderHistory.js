@@ -1,7 +1,24 @@
-import React from 'react';
-import {View, Text, TouchableOpacity} from 'react-native';
+import React, {useState, useEffect} from 'react';
+import {View, Text, TouchableOpacity, Alert} from 'react-native';
 import {GlobalStyles} from '../../GlobalStyles';
 const OrderHistory = ({navigation}) => {
+  const [status, setStatus] = useState('Fetching the status of your order...');
+
+  useEffect(() => {
+    const timeout1 = setTimeout(() => {
+      Alert.alert('Yay!', 'Your order is ready');
+    }, 3000);
+    return () => clearTimeout(timeout1);
+  }, []);
+
+  useEffect(() => {
+    const timeout2 = setTimeout(() => {
+      Alert.alert('Congratulations', 'Your order is dispatched');
+    }, 6000);
+    setStatus('Thank you for ordering!');
+    return () => clearTimeout(timeout2);
+  }, []);
+
   return (
     <View>
       <Text
@@ -11,7 +28,7 @@ const OrderHistory = ({navigation}) => {
           fontSize: 20,
           textAlign: 'center',
         }}>
-        Your Past Orders
+        {status}
       </Text>
       <TouchableOpacity
         style={GlobalStyles.submitButton}

@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react';
-import {View, Text, TextInput, FlatList, Image, Button} from 'react-native';
+import {View, Text, TextInput, FlatList, Image} from 'react-native';
 
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import {GlobalStyles} from '../../GlobalStyles';
@@ -13,8 +13,6 @@ export default function MainPage({navigation}) {
 
   useEffect(() => {
     fetchData('https://api.npoint.io/c1336d3f8d08ae53247f');
-    // .then(res => res.json())
-    // .then(data => setRestaurantList(data));
   }, []);
 
   const fetchData = async url => {
@@ -27,13 +25,6 @@ export default function MainPage({navigation}) {
       console.log(err);
     }
   };
-
-  // const locationFilter = () => {
-  //   const result = restaurantList.filter(item => {
-  //     return item.City.toLowerCase().includes(restaurantList.toLowerCase());
-  //   });
-  //   setFilteredList(result);
-  // };
 
   const filterFunction = text => {
     if (text) {
@@ -49,11 +40,6 @@ export default function MainPage({navigation}) {
       setSearch(text);
     }
   };
-
-  // let id;
-  // const selectedRestaurant = id => {
-  //   Alert.alert('Id:', id);
-  // };
 
   return (
     <>
