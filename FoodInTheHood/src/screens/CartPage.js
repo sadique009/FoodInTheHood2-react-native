@@ -4,10 +4,8 @@ import {
   View,
   Text,
   TouchableOpacity,
-  GlobalStylesheet,
   Image,
   FlatList,
-  Button,
 } from 'react-native';
 import {db} from '../firebase/config';
 import {ref, onValue, remove} from 'firebase/database';
@@ -29,7 +27,7 @@ export const CartPage = ({navigation}) => {
     remove(ref(db, '/CartData/' + key));
   };
 
-  const Checkout = () => {
+  const payment = () => {
     var options = {
       description: 'Order bill',
       image: '',
@@ -76,15 +74,13 @@ export const CartPage = ({navigation}) => {
               <SafeAreaView style={GlobalStyles.card}>
                 <Icon
                   name="highlight-remove"
-                  size={25}
+                  size={35}
+                  color="red"
                   style={GlobalStyles.icon}
                   onPress={() => removeItem(item.Key)}
                 />
                 <Text>{item.Item}</Text>
-                <Text style={GlobalStyles.name}>
-                  Restaurant: {item.Restaurant}
-                </Text>
-                <Text>Rs.{item.Price}</Text>
+                <Text style={GlobalStyles.name}>{item.Restaurant}</Text>
               </SafeAreaView>
             )}
           />
@@ -101,7 +97,7 @@ export const CartPage = ({navigation}) => {
       <SafeAreaView>
         <TouchableOpacity
           style={GlobalStyles.submitButton}
-          onPress={Checkout}
+          onPress={payment}
           //   setIsVisible(true);
 
           //   CartData(

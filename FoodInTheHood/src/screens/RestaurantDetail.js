@@ -9,7 +9,7 @@ import {
   Alert,
   Button,
 } from 'react-native';
-import {List} from 'react-native-paper';
+import {List, TextInput} from 'react-native-paper';
 import MainPage from './MainPage';
 
 import {SafeAreaView} from 'react-native';
@@ -17,13 +17,14 @@ import {GlobalStyles} from '../../GlobalStyles';
 import {db} from '../firebase/config';
 import {ref, push, update} from 'firebase/database';
 import {TouchableOpacity} from 'react-native-gesture-handler';
+import {NavigationContainer} from '@react-navigation/native';
 
 export const RestaurantDetail = ({route, navigation}) => {
   const {id} = route.params;
 
   const [restaurant, setRestaurant] = useState([]);
 
-  const [isVisible, setIsVisible] = useState(false);
+  const [showButton, setShowButton] = useState(false);
 
   const price = 200;
 
@@ -47,14 +48,13 @@ export const RestaurantDetail = ({route, navigation}) => {
   //   setCart(getItem);
   // };
 
-  const CartData = (name, Cuisines, amount) => {
-    const Restaurant = name.Name;
+  const CartData = Cuisines => {
     const Item = Cuisines.Item;
-    const Price = amount.Price;
+
     console.log('Item:', Item);
     try {
       const key = push(ref(db, '/CartData/')).key;
-      const data = {Key: key, Restaurant, Item, Price};
+      const data = {Key: key, Item};
       const updates = {};
       updates['/CartData/' + key] = data;
       update(ref(db), updates);
@@ -89,10 +89,10 @@ export const RestaurantDetail = ({route, navigation}) => {
               <Text style={GlobalStyles.name}>City : {item.City}</Text>
               <Text style={GlobalStyles.name}>Cuisines : {item.Cuisines}</Text>
 
-              <TouchableOpacity
+              {/* <TouchableOpacity
                 style={GlobalStyles.submitButton}
                 onPress={() => {
-                  setIsVisible(true);
+                  setShowButton(true);
 
                   {
                     CartData(
@@ -103,29 +103,28 @@ export const RestaurantDetail = ({route, navigation}) => {
                   }
                 }}>
                 <Text style={GlobalStyles.buttonText}>Add To Cart</Text>
+              </TouchableOpacity> */}
+              <TouchableOpacity
+                style={GlobalStyles.submitButton}
+                onPress={() => {
+                  setShowButton(true);
+
+                  {
+                    CartData({Item: item.Cuisines});
+                  }
+                }}>
+                <Text style={GlobalStyles.buttonText}>Add To Cart</Text>
               </TouchableOpacity>
             </SafeAreaView>
           )}
         />
       </SafeAreaView>
 
-      <TouchableOpacity
-        style={GlobalStyles.submitButton}
-        onPress={() => {
-          setIsVisible(true);
+      {/* <View>
+        <TextInput placeholder="ww" style={GlobalStyles.inputField}></TextInput>
+      </View> */}
 
-          {
-            CartData(
-              {Name: item.Restaurant_Name},
-              {Cuisine: item.Cuisines},
-              {Price: price},
-            );
-          }
-        }}>
-        <Text style={GlobalStyles.buttonText}>Add To Cart</Text>
-      </TouchableOpacity>
-
-      {isVisible && (
+      {showButton && (
         <TouchableOpacity
           style={GlobalStyles.submitButton}
           onPress={() => {
