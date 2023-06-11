@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react';
-import {Text, FlatList, Image} from 'react-native';
+import {Text, FlatList, Image, View} from 'react-native';
 
 import {SafeAreaView} from 'react-native';
 import {GlobalStyles} from '../../GlobalStyles';
@@ -14,6 +14,7 @@ export const RestaurantDetail = ({route, navigation}) => {
   const [restaurant, setRestaurant] = useState([]);
 
   const [showButton, setShowButton] = useState(false);
+  const [disabled, setDisabled] = useState(false);
 
   useEffect(() => {
     fetch('https://api.npoint.io/c1336d3f8d08ae53247f')
@@ -22,13 +23,13 @@ export const RestaurantDetail = ({route, navigation}) => {
 
     const filterData = Data => {
       const filteredData = Data.filter(item => {
-        return item.Restaurant_ID == id;
+        return item.Restaurant_ID === id;
       });
       setRestaurant(filteredData);
     };
   }, []);
 
-  const CartData = Cuisines => {
+  const cartData = Cuisines => {
     const Item = Cuisines.Item;
 
     console.log('Item:', Item);
@@ -57,15 +58,15 @@ export const RestaurantDetail = ({route, navigation}) => {
               <Text style={GlobalStyles.name1}>{item.Restaurant_Name}</Text>
               <Text style={GlobalStyles.name}>City : {item.City}</Text>
               <Text style={GlobalStyles.name}>Cuisines : {item.Cuisines}</Text>
-
               <TouchableOpacity
                 style={GlobalStyles.submitButton}
+                disabled={disabled}
                 onPress={() => {
                   setShowButton(true);
 
-                  {
-                    CartData({Item: item.Cuisines});
-                  }
+                  cartData({Item: item.Cuisines});
+
+                  setDisabled(true);
                 }}>
                 <Text style={GlobalStyles.buttonText}>Add To Cart</Text>
               </TouchableOpacity>

@@ -11,10 +11,6 @@ export default function MainPage({navigation}) {
   const [filteredList, setFilteredList] = useState([]);
   const [search, setSearch] = useState('');
 
-  useEffect(() => {
-    fetchData('https://api.npoint.io/c1336d3f8d08ae53247f');
-  }, []);
-
   const fetchData = async url => {
     try {
       const response = await fetch(url);
@@ -25,6 +21,10 @@ export default function MainPage({navigation}) {
       console.log(err);
     }
   };
+
+  useEffect(() => {
+    fetchData('https://api.npoint.io/c1336d3f8d08ae53247f');
+  }, []);
 
   const filterFunction = text => {
     if (text) {
@@ -41,9 +41,35 @@ export default function MainPage({navigation}) {
     }
   };
 
+  // writing the renderItem logic outside of the flatlist saves recreation of itself
+  // every time the render function is called, thereby increasing performance.
+  const renderItem = ({item}) => (
+    <View style={GlobalStyles.card}>
+      <TouchableOpacity
+        onPress={() =>
+          navigation.navigate('Restaurant Detail Page', {
+            id: item.Restaurant_ID,
+          })
+        }>
+        <Image
+          source={require('./images/home.jpg')}
+          style={GlobalStyles.listImage}
+        />
+        <View>
+          <Text style={GlobalStyles.name1}>{item.Restaurant_Name}</Text>
+          <Text style={GlobalStyles.name}>City : {item.City}</Text>
+          <Text style={GlobalStyles.name}>
+            Rating : ({item.Aggregate_rating})
+          </Text>
+          <Text style={GlobalStyles.name}>Cuisines : {item.Cuisines}</Text>
+        </View>
+      </TouchableOpacity>
+    </View>
+  );
+
   return (
     <>
-      <View style={GlobalStyles.main}>
+      <View>
         <TextInput
           multiline
           value={restaurantList}
@@ -75,34 +101,7 @@ export default function MainPage({navigation}) {
           </TouchableOpacity>
         </View>
 
-        <FlatList
-          data={filteredList}
-          renderItem={({item}) => (
-            <View style={GlobalStyles.card}>
-              <TouchableOpacity
-                onPress={() =>
-                  navigation.navigate('Restaurant Detail Page', {
-                    id: item.Restaurant_ID,
-                  })
-                }>
-                <Image
-                  source={require('./images/home.jpg')}
-                  style={GlobalStyles.listImage}
-                />
-                <View>
-                  <Text style={GlobalStyles.name1}>{item.Restaurant_Name}</Text>
-                  <Text style={GlobalStyles.name}>City : {item.City}</Text>
-                  <Text style={GlobalStyles.name}>
-                    Rating : ({item.Aggregate_rating})
-                  </Text>
-                  <Text style={GlobalStyles.name}>
-                    Cuisines : {item.Cuisines}
-                  </Text>
-                </View>
-              </TouchableOpacity>
-            </View>
-          )}
-        />
+        <FlatList data={filteredList} renderItem={renderItem} />
       </View>
     </>
   );

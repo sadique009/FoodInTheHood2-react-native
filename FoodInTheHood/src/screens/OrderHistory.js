@@ -1,43 +1,76 @@
 import React, {useState, useEffect} from 'react';
-import {View, Text, TouchableOpacity, Alert} from 'react-native';
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  Alert,
+  SafeAreaView,
+  FlatList,
+} from 'react-native';
 import {GlobalStyles} from '../../GlobalStyles';
+
+import {db} from '../firebase/config';
+import Icon from 'react-native-vector-icons/MaterialIcons';
+import {ref, onValue, remove} from 'firebase/database';
 const OrderHistory = ({navigation}) => {
-  const [status, setStatus] = useState('Fetching the status of your order...');
+  const [orderHistory, setOrderHistory] = useState([]);
+  const [orderStatus, setOrderStatus] = useState('');
+  const [isVisible, setIsVisible] = useState(false);
+  // const [status, setStatus] = useState('Fetching the status of your order...');
+
+  //
 
   useEffect(() => {
-    const timeout1 = setTimeout(() => {
-      Alert.alert('Yay!', 'Your order is ready');
-    }, 3000);
-    return () => clearTimeout(timeout1);
+    onValue(ref(db, '/OrderHistory/'), querySnapshot => {
+      let Data = Object.values(querySnapshot.val() || {});
+      setOrderHistory(Data);
+      console.log('Status:', Data.Status);
+    });
+    setOrderStatus('Order Placed');
   }, []);
 
-  useEffect(() => {
-    const timeout2 = setTimeout(() => {
-      Alert.alert('Congratulations', 'Your order is dispatched');
-    }, 6000);
-    setStatus('Thank you for ordering!');
-    return () => clearTimeout(timeout2);
-  }, []);
+  const removeItem = Data => {
+    remove(ref(db, '/OrderHistory/' + Data));
+  };
 
   return (
-    <View>
-      <Text
-        style={{
-          margin: 25,
-          fontWeight: 'bold',
-          fontSize: 20,
-          textAlign: 'center',
-        }}>
-        {status}
-      </Text>
-      <TouchableOpacity
-        style={GlobalStyles.submitButton}
-        onPress={() => {
-          navigation.navigate('Main Page');
-        }}>
-        <Text style={GlobalStyles.buttonText}>Go To Main Page</Text>
-      </TouchableOpacity>
-    </View>
+    <SafeAreaView>
+      <FlatList
+        data={orderHistory}
+        renderItem={({item}) => (
+          <SafeAreaView style={GlobalStyles.card}>
+            {/* <Icon
+              name="delete"
+              size={35}
+              color="red"
+              style={GlobalStyles.icon}
+              onPress={() => removeItem(item.Key)}
+            /> */}
+            <Text
+              style={{
+                margin: 20,
+                textAlign: 'center',
+                fontSize: 20,
+                fontWeight: 'bold',
+              }}>
+              {item.Item}
+            </Text>
+
+            <TouchableOpacity
+              style={GlobalStyles.submitButton}
+              onPress={() => {
+                // setIsVisible(true), setStatus();
+                navigation.navigate('Track Order');
+                {
+                  () => removeItem;
+                }
+              }}>
+              <Text style={GlobalStyles.buttonText}>Track Order</Text>
+            </TouchableOpacity>
+          </SafeAreaView>
+        )}
+      />
+    </SafeAreaView>
   );
 };
 

@@ -7,6 +7,11 @@ const GlobalStyles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: 'white',
   },
+  splash: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
   heading: {fontWeight: 'bold', fontSize: 24, color: '#282A3A', padding: 8},
   inputField: {
     borderWidth: 2,
@@ -34,7 +39,7 @@ const GlobalStyles = StyleSheet.create({
   },
   icon: {
     flexDirection: 'row',
-    justifyContent: 'space-around',
+    justifyContent: 'space-evenly',
     marginBottom: 20,
   },
   name: {
@@ -42,6 +47,10 @@ const GlobalStyles = StyleSheet.create({
     textAlign: 'center',
     fontWeight: 'bold',
     padding: 4,
+  },
+  splashImage: {
+    width: 400,
+    height: 500,
   },
   text: {
     color: 'white',
@@ -64,7 +73,7 @@ const GlobalStyles = StyleSheet.create({
     width: 150,
     height: 150,
     alignSelf: 'center',
-    borderRadius:10,
+    borderRadius: 10,
     margin: 45,
     padding: 20,
   },
@@ -76,7 +85,7 @@ const GlobalStyles = StyleSheet.create({
     padding: 14,
     borderRadius: 10,
     width: 250,
-    elevation: 8,
+    elevation: 6,
   },
   bottomText: {
     textAlign: 'center',

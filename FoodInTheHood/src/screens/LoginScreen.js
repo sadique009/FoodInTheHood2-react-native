@@ -10,7 +10,7 @@ export default function LoginScreen({navigation}) {
 
   const handleSubmit = () => {
     signInWithEmailAndPassword(auth, email, password)
-      .then(userdata => {
+      .then(() => {
         navigation.replace('Main Page');
       })
       .catch(error => {

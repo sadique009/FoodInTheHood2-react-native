@@ -7,6 +7,7 @@ import {GlobalStyles} from '../../GlobalStyles';
 
 export const SettingScreen = ({navigation, email}) => {
   const signout = () => {
+    // mref.child(FirebaseAuth.getInstance().currentUser.uid).remove();
     signOut(auth)
       .then(() => {
         navigation.replace('Login Page');
@@ -24,7 +25,7 @@ export const SettingScreen = ({navigation, email}) => {
       <Text style={GlobalStyles.name1}>Your Profile</Text>
       <View style={GlobalStyles.desc}>
         <Text style={GlobalStyles.name}>Name : Annonymous</Text>
-        <Text style={GlobalStyles.name}>E-mail id : msn@gmail.com</Text>
+        <Text style={GlobalStyles.name}>E-mail id : msn@gmail.com {email}</Text>
         <Text style={GlobalStyles.name}>Address : xyz street</Text>
       </View>
 

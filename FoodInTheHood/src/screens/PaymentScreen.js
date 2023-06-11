@@ -13,6 +13,35 @@ import {ref, onValue, push, update, remove} from 'firebase/database';
 import {GlobalStyles} from '../../GlobalStyles';
 
 const PaymentScreen = ({navigation}) => {
+  const [isVisible, setIsVisible] = useState(false);
+  const [orderData, setOrderData] = useState([]);
+
+  function goTo() {
+    navigation.navigate('Order History');
+  }
+
+  const handler = () => {
+    onValue(ref(db, '/CartData/'), querySnapshot => {
+      let Data = Object.values(querySnapshot.val() || {});
+      setOrderData(Data);
+    });
+
+    orderData.forEach(data => {
+      push(ref(db, '/OrderHistory/'), {
+        Item: data.Item,
+        Key: data.Item,
+        // Order_Time: new Date().toLocaleString(),
+        // Status: 'Order Placed',
+      });
+    });
+    setIsVisible(true);
+  };
+  
+
+  function combined() {
+    goTo();
+    handler();
+  }
   return (
     <>
       <SafeAreaView>
@@ -25,14 +54,16 @@ const PaymentScreen = ({navigation}) => {
           }}>
           Hurray! Your payment was succesful.
         </Text>
-        {/* <Button title="Place Order" onPress={() => handleOrderPlaced()} /> */}
+        <TouchableOpacity style={GlobalStyles.submitButton} onPress={handler}>
+          <Text style={GlobalStyles.buttonText}>Done</Text>
+        </TouchableOpacity>
       </SafeAreaView>
       <SafeAreaView style={GlobalStyles.BottomButtonView}>
-        <TouchableOpacity
-          style={GlobalStyles.submitButton}
-          onPress={() => navigation.navigate('Order History')}>
-          <Text style={GlobalStyles.buttonText}>Track Order</Text>
-        </TouchableOpacity>
+        {isVisible && (
+          <TouchableOpacity style={GlobalStyles.submitButton} onPress={goTo}>
+            <Text style={GlobalStyles.buttonText}>Go To Order History</Text>
+          </TouchableOpacity>
+        )}
       </SafeAreaView>
     </>
   );

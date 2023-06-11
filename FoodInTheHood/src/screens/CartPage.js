@@ -6,6 +6,7 @@ import {
   TouchableOpacity,
   Image,
   FlatList,
+  Alert,
 } from 'react-native';
 import {db} from '../firebase/config';
 import {ref, onValue, remove} from 'firebase/database';
@@ -26,6 +27,14 @@ export const CartPage = ({navigation}) => {
   const removeItem = key => {
     remove(ref(db, '/CartData/' + key));
   };
+
+  const removeAll = Data => {
+    remove(ref(db, '/CartData/' + Data));
+  };
+  function combined() {
+    payment();
+    removeAll();
+  }
 
   const payment = () => {
     var options = {
@@ -57,7 +66,20 @@ export const CartPage = ({navigation}) => {
     fetchData();
   }, []);
 
-  return (
+  return !cartData.length ? (
+    <>
+      <Text
+        style={{
+          margin: 15,
+          textAlign: 'center',
+          fontSize: 30,
+          fontWeight: 'bold',
+
+        }}>
+        Your cart is empty...
+      </Text>
+    </>
+  ) : (
     <>
       <View style={GlobalStyles.main}>
         <Image
@@ -66,24 +88,30 @@ export const CartPage = ({navigation}) => {
         />
         <Text style={GlobalStyles.name1}>Your Cart Items</Text>
 
-        <SafeAreaView>
-          <FlatList
-            data={cartData}
-            renderItem={({item}) => (
-              <SafeAreaView style={GlobalStyles.card}>
-                <Icon
-                  name="delete"
-                  size={35}
-                  color="red"
-                  style={GlobalStyles.icon}
-                  onPress={() => removeItem(item.Key)}
-                />
-                <Text>{item.Item}</Text>
-                {/* <Text style={GlobalStyles.name}>{item.Restaurant}</Text> */}
-              </SafeAreaView>
-            )}
-          />
-        </SafeAreaView>
+        <FlatList
+          data={cartData}
+          renderItem={({item}) => (
+            <View style={GlobalStyles.card}>
+              <Icon
+                name="delete"
+                size={35}
+                color="red"
+                style={GlobalStyles.icon}
+                onPress={() => removeItem(item.Key)}
+              />
+              <Text
+                style={{
+                  margin: 10,
+                  textAlign: 'center',
+                  fontSize: 15,
+                  fontWeight: 'bold',
+                }}>
+                {item.Item}
+              </Text>
+              {/* <Text style={GlobalStyles.name}>{item.Restaurant}</Text> */}
+            </View>
+          )}
+        />
       </View>
 
       <SafeAreaView>
@@ -93,4 +121,80 @@ export const CartPage = ({navigation}) => {
       </SafeAreaView>
     </>
   );
+
+  // alternate code
+
+  // if (cartData.length === 0) {
+  //   return (
+  //     <>
+  //       <Text
+  //         style={{
+  //           margin: 15,
+  //           textAlign: 'center',
+  //           fontSize: 30,
+  //           fontWeight: 'bold',
+  //         }}>
+  //         Your cart is empty...
+  //       </Text>
+  //     </>
+  //   );
+  // } else if (cartData.length === 1) {
+  //   return (
+  //     <>
+  //       <View style={GlobalStyles.main}>
+  //         <Image
+  //           source={require('./images/cart.png')}
+  //           style={GlobalStyles.profileImage}
+  //         />
+  //         <Text style={GlobalStyles.name1}>Your Cart Items</Text>
+
+  //         <FlatList
+  //           data={cartData}
+  //           renderItem={({item}) => (
+  //             <View style={GlobalStyles.card}>
+  //               <Icon
+  //                 name="delete"
+  //                 size={35}
+  //                 color="red"
+  //                 style={GlobalStyles.icon}
+  //                 onPress={() => removeItem(item.Key)}
+  //               />
+  //               <Text
+  //                 style={{
+  //                   margin: 10,
+  //                   textAlign: 'center',
+  //                   fontSize: 15,
+  //                   fontWeight: 'bold',
+  //                 }}>
+  //                 {item.Item}
+  //               </Text>
+  //               {/* <Text style={GlobalStyles.name}>{item.Restaurant}</Text> */}
+  //             </View>
+  //           )}
+  //         />
+  //       </View>
+
+  //       <SafeAreaView>
+  //         <TouchableOpacity style={GlobalStyles.submitButton} onPress={payment}>
+  //           <Text style={GlobalStyles.buttonText}>Checkout</Text>
+  //         </TouchableOpacity>
+  //       </SafeAreaView>
+  //     </>
+  //   );
+  // } else {
+  //   return (
+  //     <View>
+  //       <Text
+  //         tyle={{
+  //           margin: 15,
+  //           textAlign: 'center',
+  //           fontSize: 30,
+  //           fontWeight: 'bold',
+  //         }}>
+  //         Your cart already has dishes from some other restaurant. Please remove
+  //         them to proceed further.
+  //       </Text>
+  //     </View>
+  //   );
+  // }
 };
